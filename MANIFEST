@@ -1,7 +1,6 @@
-Changes
+ChangeLog
 MANIFEST
 Makefile.PL
-README
 SawAmpersand.xs
 lib/B/FindAmpersand.pm
 lib/Devel/FindAmpersand.pm

@@ -9,6 +9,6 @@ WriteMakefile(
     'INC'	=> '',     # e.g., '-I/usr/include/other' 
     'dist'      => {
 		    COMPRESS => 'gzip -9',
-		    PREOP => 'co -l README && pod2text lib/Devel/SawAmpersand.pm > README && ci -u README',
+		    PREOP => 'pod2text lib/Devel/SawAmpersand.pm > $(DISTVNAME)/README',
 		   },
 );

@@ -12,7 +12,7 @@ DESCRIPTION
     and $&. It never can be set to false again. Trying to set it to false
     breaks the handling of the $`, $&, and $' completely.
 
-    If the global variable `sawampersand' is set to true, all subsequent RE
+    If the global variable "sawampersand" is set to true, all subsequent RE
     operations will be accompanied by massive in-memory copying, because
     there is nobody in the perl source who could predict, when the
     (necessary) copy for the ampersand family will be needed. So all
@@ -22,29 +22,30 @@ DESCRIPTION
 
     *   never use $& and friends in a library.
 
-    *   Never "use English" in a library, because it contains the three bad
-        fellows.
+    *   Don't "use English" in a library, because it contains the three bad
+        fellows. Corollary: if you really want to use English, do it like
+        so:
 
-    *   before you release a module or program, check if sawampersand is set by
-        any of the modules you use or require.
+            use English qw( -no_match_vars ) ;
+
+    *   before you release a module or program, check if sawampersand is set
+        by any of the modules you use or require.
 
   Workaround
-
     Fortunately perl offers easy to use alternatives, that is
 
            instead of this              you can use this
 
-         $`   of   /pattern/          $1   of  /(.*?)pattern/s       
+         $`   of   /pattern/          $1   of  /(.*?)pattern/s
          $&   of   /pattern/          $1   of  /(pattern)/
          $'   of   /pattern/          $+   of  /pattern(.*)/s
 
-    In general, apply `/^(.*)(pattern)(.*)$/s' and use $1 for $`, $2 for $&
+    In general, apply "/^(.*)(pattern)(.*)$/s" and use $1 for $`, $2 for $&
     and $+ for $' ($+ is not dependent on the number of parens in the
-    original pattern). Note that the `/s' switch can alter the meaning of
-    `.' in your pattern.
+    original pattern). Note that the "/s" switch can alter the meaning of
+    "." in your pattern.
 
   Future Directions
-
       From: jmm@elegant.com (John Macdonald)
       Date: Wed, 24 Dec 1997 10:49:56 -0500
 

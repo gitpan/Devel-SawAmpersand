@@ -1,0 +1,33 @@
+2002-10-07  Andreas J. Koenig  <andreas.koenig@anima.de>
+
+	* Released 0.30.
+
+	* Makefile.PL: README generation was buggy.
+
+	* Updated documentation to reflect -no_match_vars in the
+	English.pm module.
+
+	* Received a patch from Slaven Rezic that makes FindAmpersend work
+	with perl 5.6 and 5.8. Unfortunately not yet for threaded perl
+	5.8. Updated the tests.
+
+1999-01-01
+
+	* Released 0.20 January 1999: Updated to work with perl5.005_54
+	where sawampersand was renamed to PL_sawampersand
+
+1998-02-01 
+
+	* I just received from Doug MacEachern a findampersand package
+	which is so cool that I can't wait including it immediately in the
+	distribution. Thanks, Doug!!
+
+1998-01-01
+
+	* Spotted that I had been inconsequent about the name of the
+	module. Was it Devel::SawAmpersand or Debug::SawAmpersand? 0.03
+	says Devel:: in *all* places.
+
+1997-12-01
+
+	* Improved documentation about the sawampersand variable

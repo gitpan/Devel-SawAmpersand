@@ -8,7 +8,7 @@ use Exporter;
 require DynaLoader;
 @ISA = qw(DynaLoader);
 @EXPORT_OK = qw(sawampersand);
-$VERSION = '0.20';
+$VERSION = '0.30';
 
 bootstrap Devel::SawAmpersand $VERSION;
 
@@ -49,8 +49,10 @@ never use $& and friends in a library.
 
 =item *
 
-Never "use English" in a library, because it contains the three
-bad fellows.
+Don't "use English" in a library, because it contains the three bad
+fellows. Corollary: if you really want to use English, do it like so:
+
+    use English qw( -no_match_vars ) ;
 
 =item *
 
@@ -65,7 +67,7 @@ Fortunately perl offers easy to use alternatives, that is
 
        instead of this              you can use this
 
-     $`   of   /pattern/          $1   of  /(.*?)pattern/s       
+     $`   of   /pattern/          $1   of  /(.*?)pattern/s
      $&   of   /pattern/          $1   of  /(pattern)/
      $'   of   /pattern/          $+   of  /pattern(.*)/s
 

@@ -1,9 +1,14 @@
 package B::FindAmpersand;
+BEGIN {
+  require Config;
+  die "B::FindAmpersand not supported for threaded perl" if $Config::Config{usethreads};
+}
+
 use B;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "0.03";
+$VERSION = "0.04";
 
 my $evil = join "", qw"[ ` & ' ]";
 
@@ -24,7 +29,9 @@ sub B::GV::findampersand {
 }
 
 sub B::OP::findampersand {}
-sub B::SVOP::findampersand {}
+*B::SVOP::findampersand = $] < 5.006 ? sub {} : sub {
+    shift->gv->findampersand;
+};
 sub B::PMOP::findampersand {}
 sub B::PVOP::findampersand {}
 sub B::COP::findampersand {}
@@ -51,7 +58,7 @@ B::FindAmpersand - A compiler backend to find variables that set sawampersand
 
 The Devel::SawAmpersand can tell you if Perl has set C<sawampersand>,
 but it doesn't tell you where.  Sure, you can grep, but what if you don't
-know where to grep?  
+know where to grep?
 
 =head1 AUTHOR
 
