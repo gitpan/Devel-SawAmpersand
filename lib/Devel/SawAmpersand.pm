@@ -8,7 +8,7 @@ use Exporter;
 require DynaLoader;
 @ISA = qw(DynaLoader);
 @EXPORT_OK = qw(sawampersand);
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 bootstrap Devel::SawAmpersand $VERSION;
 
@@ -90,10 +90,10 @@ sawampersand need to affect the compilation of the RE's too?)
 =head1 AUTHOR
 
 Andreas Koenig, special thanks to Johan Vromans and John Macdonald for
-parts of the manpage.
+parts of the manpage and to Doug MacEachern for the FindAmpersand.
 
 =head1 SEE ALSO
 
-perl(1).
+Devel::FindAmpersand, B::FindAmpersand
 
 =cut

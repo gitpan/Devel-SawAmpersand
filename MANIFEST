@@ -2,6 +2,8 @@ Changes
 MANIFEST
 Makefile.PL
 README
-SawAmpersand.pm
 SawAmpersand.xs
+lib/B/FindAmpersand.pm
+lib/Devel/FindAmpersand.pm
+lib/Devel/SawAmpersand.pm
 test.pl

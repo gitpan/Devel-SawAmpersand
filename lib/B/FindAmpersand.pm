@@ -1,0 +1,56 @@
+package B::FindAmpersand;
+use strict;
+
+my $evil = join "|", qw{` & '};
+
+sub compile {
+    return sub { B::walkoptree(B::main_root(), "findampersand") }
+}
+
+sub B::GVOP::findampersand {
+    my($op, $level) = @_;
+    $op->gv->findampersand($op);
+}
+
+sub B::GV::findampersand {
+    my($gv, $op) = @_;
+    return unless $gv->NAME =~ /^($evil)$/;
+    print "Found evil variable \$", $gv->NAME, "\n";
+    print "File=", $gv->FILEGV->SV->PV, "\n";
+    print "Line=", $gv->LINE, "\n";
+}
+
+sub B::OP::findampersand {}
+sub B::SVOP::findampersand {}
+sub B::PMOP::findampersand {}
+sub B::PVOP::findampersand {}
+sub B::COP::findampersand {}
+sub B::PV::findampersand {}
+sub B::AV::findampersand {}
+sub B::IV::findampersand {}
+sub B::NV::findampersand {}
+sub B::NULL::findampersand {}
+sub B::SPECIAL::findampersand {}
+
+1;
+
+__END__
+
+=head1 NAME
+
+B::FindAmpersand - A compiler backend to find variables that set sawampersand
+
+=head1 SYNOPSIS
+
+ perl -MO=FindAmpersand file.pl
+
+=head1 DESCRIPTION
+
+The Devel::SawAmpersand can tell you if Perl has set C<sawampersand>,
+but it doesn't tell you where.  Sure, you can grep, but what if you don't
+know where to grep?  
+
+=head1 AUTHOR
+
+Doug MacEachern
+
