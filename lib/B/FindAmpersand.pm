@@ -3,9 +3,9 @@ use B;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "0.02";
+$VERSION = "0.03";
 
-my $evil = "[\`\&\']";
+my $evil = join "", qw"[ ` & ' ]";
 
 sub compile {
     return sub { B::walkoptree(B::main_root(), "findampersand") }
