@@ -1,6 +1,7 @@
 Changes
 MANIFEST
 Makefile.PL
+README
 SawAmpersand.pm
 SawAmpersand.xs
 test.pl

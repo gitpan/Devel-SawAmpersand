@@ -8,7 +8,7 @@ use Exporter;
 require DynaLoader;
 @ISA = qw(DynaLoader);
 @EXPORT_OK = qw(sawampersand);
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 bootstrap Devel::SawAmpersand $VERSION;
 
