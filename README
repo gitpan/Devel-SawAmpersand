@@ -58,8 +58,8 @@ DESCRIPTION
 
 AUTHOR
     Andreas Koenig, special thanks to Johan Vromans and John Macdonald for
-    parts of the manpage.
+    parts of the manpage and to Doug MacEachern for the FindAmpersand.
 
 SEE ALSO
-    perl(1).
+    Devel::FindAmpersand, B::FindAmpersand
 

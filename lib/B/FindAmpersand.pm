@@ -1,7 +1,11 @@
 package B::FindAmpersand;
+use B;
 use strict;
+use vars qw($VERSION);
 
-my $evil = join "|", qw{` & '};
+$VERSION = "0.02";
+
+my $evil = "[\`\&\']";
 
 sub compile {
     return sub { B::walkoptree(B::main_root(), "findampersand") }
@@ -13,11 +17,10 @@ sub B::GVOP::findampersand {
 }
 
 sub B::GV::findampersand {
-    my($gv, $op) = @_;
-    return unless $gv->NAME =~ /^($evil)$/;
-    print "Found evil variable \$", $gv->NAME, "\n";
-    print "File=", $gv->FILEGV->SV->PV, "\n";
-    print "Line=", $gv->LINE, "\n";
+    my($gv) = @_;
+    return unless $gv->NAME =~ /^$evil$/;
+    my @report = ($gv->NAME, $gv->FILEGV->SV->PV, $gv->LINE);
+    warn sprintf "Found evil variable \$%s in file %s, line %s\n", @report;
 }
 
 sub B::OP::findampersand {}
@@ -54,3 +57,4 @@ know where to grep?
 
 Doug MacEachern
 
+=cut

@@ -6,4 +6,5 @@ SawAmpersand.xs
 lib/B/FindAmpersand.pm
 lib/Devel/FindAmpersand.pm
 lib/Devel/SawAmpersand.pm
-test.pl
+t/saw.t
+t/find.t
