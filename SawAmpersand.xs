@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
@@ -8,8 +9,16 @@ extern "C" {
 }
 #endif
 
+#include "patchlevel.h"
 
-MODULE = Devel::SawAmpersand		PACKAGE = Devel::SawAmpersand		
+#if PATCHLEVEL < 5
+#  ifndef PL_sawampersand
+#    define PL_sawampersand sawampersand
+#  endif
+#endif
+
+
+MODULE = Devel::SawAmpersand		PACKAGE = Devel::SawAmpersand
 
 bool
 sawampersand()
@@ -17,7 +26,7 @@ sawampersand()
     PROTOTYPE:
 
     CODE:
-    RETVAL = sawampersand;
+    RETVAL = PL_sawampersand;
 
     OUTPUT:
     RETVAL

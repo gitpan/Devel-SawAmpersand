@@ -1,5 +1,9 @@
 Revision history for Perl extension Devel::SawAmpersand.
 
+0.20 January 1999
+
+Updated to work with perl5.005_54 where sawampersand was renamed to PL_sawampersand
+
 0.05 February 1998
 
 I just received from Doug MacEachern a findampersand package which is
