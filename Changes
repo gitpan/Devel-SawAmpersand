@@ -1,5 +1,15 @@
 Revision history for Perl extension Devel::SawAmpersand.
 
+0.03 January 1998
+
+Spotted that I had been inconsequent about the name of the module. Was
+it Devel::SawAmpersand or Debug::SawAmpersand? 0.03 says Devel:: in
+*all* places.
+
+0.02 December 1997
+
+Improved documentation about the sawampersand variable
+
 0.01  Tue Dec  9 21:34:40 1997
 	- original version; created by h2xs 1.18
 

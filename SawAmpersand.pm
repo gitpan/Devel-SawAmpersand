@@ -1,4 +1,4 @@
-package Debug::SawAmpersand;
+package Devel::SawAmpersand;
 
 use strict;
 use vars qw($VERSION @ISA @EXPORT_OK);
@@ -8,9 +8,9 @@ use Exporter;
 require DynaLoader;
 @ISA = qw(DynaLoader);
 @EXPORT_OK = qw(sawampersand);
-$VERSION = '0.02';
+$VERSION = '0.03';
 
-bootstrap Debug::SawAmpersand $VERSION;
+bootstrap Devel::SawAmpersand $VERSION;
 
 1;
 
@@ -18,11 +18,11 @@ __END__
 
 =head1 NAME
 
-Debug::SawAmpersand - Perl extension querying sawampersand variable
+Devel::SawAmpersand - Perl extension querying sawampersand variable
 
 =head1 SYNOPSIS
 
-  use Debug::SawAmpersand qw(sawampersand);
+  use Devel::SawAmpersand qw(sawampersand);
 
   sawampersand();
 
