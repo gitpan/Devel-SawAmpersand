@@ -7,5 +7,8 @@ WriteMakefile(
     'LIBS'	=> [''],   # e.g., '-lm' 
     'DEFINE'	=> '',     # e.g., '-DHAVE_SOMETHING' 
     'INC'	=> '',     # e.g., '-I/usr/include/other' 
-    'dist'      => { COMPRESS => 'gzip -9' },
+    'dist'      => {
+		    COMPRESS => 'gzip -9',
+		    PREOP => 'co -l README && pod2text SawAmpersand.pm > README && ci -u README',
+		   },
 );
