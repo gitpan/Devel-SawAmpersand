@@ -8,7 +8,7 @@ use Exporter;
 require DynaLoader;
 @ISA = qw(DynaLoader);
 @EXPORT_OK = qw(sawampersand);
-$VERSION = '0.30';
+$VERSION = '0.31';
 
 bootstrap Devel::SawAmpersand $VERSION;
 
@@ -18,7 +18,7 @@ __END__
 
 =head1 NAME
 
-Devel::SawAmpersand - Perl extension querying sawampersand variable
+Devel::SawAmpersand - Perl extension querying PL_sawampersand variable
 
 =head1 SYNOPSIS
 
@@ -28,16 +28,27 @@ Devel::SawAmpersand - Perl extension querying sawampersand variable
 
 =head1 DESCRIPTION
 
-There's a global variable in the perl source, called sawampersand. It
-gets set to true in that moment in which the parser sees one of $`,
+This module provides one single function:
+
+=over
+
+=item $bool = Devel::SawAmpersand::sawampersand()
+
+Returns a true value if the compiled code has the C-level global
+variable PL_sawampersand set.
+
+=back
+
+There's a global variable in the perl source, called PL_sawampersand.
+It gets set to true in that moment in which the parser sees one of $`,
 $', and $&. It never can be set to false again. Trying to set it to
 false breaks the handling of the $`, $&, and $' completely.
 
-If the global variable C<sawampersand> is set to true, all subsequent
-RE operations will be accompanied by massive in-memory copying,
-because there is nobody in the perl source who could predict, B<when>
-the (necessary) copy for the ampersand family will be needed. So B<all>
-subsequent REs are considerable slower than necessary.
+If the global variable C<PL_sawampersand> is set to true, all
+subsequent RE operations will be accompanied by massive in-memory
+copying, because there is nobody in the perl source who could predict,
+B<when> the (necessary) copy for the ampersand family will be needed.
+So B<all> subsequent REs are considerable slower than necessary.
 
 There are at least three impacts for developers:
 
@@ -57,7 +68,7 @@ fellows. Corollary: if you really want to use English, do it like so:
 =item *
 
 before you release a module or program, check
-if sawampersand is set by any of the modules you use or require.
+if PL_sawampersand is set by any of the modules you use or require.
 
 =back
 
@@ -81,18 +92,25 @@ C<.> in your pattern.
   From: jmm@elegant.com (John Macdonald)
   Date: Wed, 24 Dec 1997 10:49:56 -0500
 
-How about adding an option to matches/substitutes that
-explicitly sets $`, $&, and $'?  When this new option is seen,
-sawampersand will be set for the duration of the match and then
-turned off.  That causes the expense for unflagged matches to go
-back to normal and only flagged matches incur the extra expense
-and they would be the ones that actually need it.  (Or does
-sawampersand need to affect the compilation of the RE's too?)
+How about adding an option to matches/substitutes that explicitly sets
+$`, $&, and $'? When this new option is seen, PL_sawampersand will be
+set for the duration of the match and then turned off. That causes the
+expense for unflagged matches to go back to normal and only flagged
+matches incur the extra expense and they would be the ones that
+actually need it. (Or does PL_sawampersand need to affect the
+compilation of the RE's too?)
 
 =head1 AUTHOR
 
 Andreas Koenig, special thanks to Johan Vromans and John Macdonald for
 parts of the manpage and to Doug MacEachern for the FindAmpersand.
+
+=head1 LICENSE
+
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+See L<http://www.perl.com/perl/misc/Artistic.html>
 
 =head1 SEE ALSO
 

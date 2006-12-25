@@ -1,0 +1,35 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.55.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 21a5169b87374be7fa2fd301ee54a77527864045 ChangeLog
+SHA1 688f9e1db21c3bb09d99e98400e64cf55c4a3fd6 MANIFEST
+SHA1 337216bc7250c3e8ac5ce61a22bdcac9689c7755 META.yml
+SHA1 589607c0575edfcdb65fd109cb099c52352f52fc Makefile.PL
+SHA1 94ff6add97b972532c0160dfc9a1e4c6c09e9d57 SawAmpersand.xs
+SHA1 dd434fbce5e0cc62d91fb58b29d2432e93148df5 lib/B/FindAmpersand.pm
+SHA1 f3383fc4857b344778edea58a8485a562168eb5e lib/Devel/FindAmpersand.pm
+SHA1 703497478106d44e251e3539db62676e13740ab4 lib/Devel/SawAmpersand.pm
+SHA1 6a79f15a10337bd3450604abf39d4462df2a550b t/50pod.t
+SHA1 cb5c68400c34bc4d574626f4401d525438c43f73 t/52podcover.t
+SHA1 2aca1dd314b8eb2d77671fb9f800274360bb7b36 t/find.t
+SHA1 4ca25f75cd118f1ac93926594c3f3900c82ef500 t/saw.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+
+iD8DBQFFj5q/7IA58KMXwV0RAth/AJ9U92th6k3Vsgk5l3HclLB5gcrltgCgu+1l
+c5u354YDOiJJY11I8PN4QLQ=
+=3SdX
+-----END PGP SIGNATURE-----
