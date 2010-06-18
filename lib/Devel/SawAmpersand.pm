@@ -8,7 +8,7 @@ use Exporter;
 require DynaLoader;
 @ISA = qw(DynaLoader);
 @EXPORT_OK = qw(sawampersand);
-$VERSION = '0.31';
+$VERSION = '0.32';
 
 bootstrap Devel::SawAmpersand $VERSION;
 
@@ -56,7 +56,7 @@ There are at least three impacts for developers:
 
 =item *
 
-never use $& and friends in a library.
+never use $& and friends in a library. Use /p if you have perl 5.10 or later.
 
 =item *
 
@@ -72,9 +72,19 @@ if PL_sawampersand is set by any of the modules you use or require.
 
 =back
 
-=head2 Workaround
+=head2 Workarounds
 
-Fortunately perl offers easy to use alternatives, that is
+Fortunately, perl offers easy to use alternatives. If you have perl 5.10
+or later, you can use the /p match operator flag to turn on per-match
+variables that do the same thing:
+
+       instead of this              you can use this
+
+     $`   of   /pattern/          ${^PREMATCH}  of  /pattern/p
+     $&   of   /pattern/          ${^MATCH}     of  /pattern/p
+     $'   of   /pattern/          ${^POSTMATCH} of  /pattern/p
+
+If you are using an older perl, you can use these workarounds:
 
        instead of this              you can use this
 
@@ -87,23 +97,12 @@ $& and $+ for $' ($+ is not dependent on the number of parens in the
 original pattern). Note that the C</s> switch can alter the meaning of
 C<.> in your pattern.
 
-=head2 Future Directions
-
-  From: jmm@elegant.com (John Macdonald)
-  Date: Wed, 24 Dec 1997 10:49:56 -0500
-
-How about adding an option to matches/substitutes that explicitly sets
-$`, $&, and $'? When this new option is seen, PL_sawampersand will be
-set for the duration of the match and then turned off. That causes the
-expense for unflagged matches to go back to normal and only flagged
-matches incur the extra expense and they would be the ones that
-actually need it. (Or does PL_sawampersand need to affect the
-compilation of the RE's too?)
 
 =head1 AUTHOR
 
-Andreas Koenig, special thanks to Johan Vromans and John Macdonald for
-parts of the manpage and to Doug MacEachern for the FindAmpersand.
+Andreas Koenig, special thanks to Johan Vromans, John Macdonald, and
+brian d foy for parts of the manpage and to Doug MacEachern for the
+FindAmpersand.
 
 =head1 LICENSE
 
