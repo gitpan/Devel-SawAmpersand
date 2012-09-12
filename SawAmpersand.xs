@@ -20,13 +20,13 @@ extern "C" {
 
 MODULE = Devel::SawAmpersand		PACKAGE = Devel::SawAmpersand
 
-bool
+U8
 sawampersand()
 
     PROTOTYPE:
 
     CODE:
-    RETVAL = PL_sawampersand;
+    RETVAL = (U8)PL_sawampersand;
 
     OUTPUT:
     RETVAL

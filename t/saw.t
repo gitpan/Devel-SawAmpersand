@@ -22,5 +22,5 @@ BEGIN { print Devel::SawAmpersand::sawampersand == 0 ? "ok 2\n" : "not ok 2\n"; 
 
 BEGIN { # emulate English.pm
         *MATCH                                  = *&    ;
-        print sawampersand == 1 ? "ok 3\n" : "not ok 3\n"; }
+        print sawampersand >= 1 ? "ok 3\n" : "not ok 3\n"; }
 

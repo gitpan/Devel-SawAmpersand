@@ -1,105 +1,107 @@
+use strict;
+use warnings;
 use ExtUtils::MakeMaker;
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
-# the contents of the Makefile that is written.
-eval { require File::Spec; };
-my $HAVE_FILE_SPEC = !$@;
+$ExtUtils::MakeMaker::VERSION =~ s/_//g;
+my @sign = (MM->can("signature_target") ? (SIGN => 1) : ());
 my $version_diff = 0; # we'll have to die if this becomes true
-
-if ($HAVE_FILE_SPEC) {
-  $version_from = File::Spec->catfile(qw(lib Devel SawAmpersand.pm));
-  my $version_set_manually = 1; # not by SVN
-
-  if ($ARGV[0] && $ARGV[0] eq "--setversion") {
+$::version_from = 'lib/Devel/SawAmpersand.pm';
+my $mmgenereatedversionfrom = MM->parse_version($::version_from);
+if ($ARGV[0] && $ARGV[0] eq "--setversion") {
     die "Your perl is a bit dated[$]].\nDo not make a release with it\n" if $] < 5.008;
-    die "Your MakeMaker is a bit dated[$ExtUtils::MakeMaker::VERSION].\nDo not make a release with it\n"
-        if $ExtUtils::MakeMaker::VERSION < 6.3004;
-    die "Your MakeMaker doesn't do the sign woodoo" unless
-        MM->can("signature_target");
-    shift @ARGV;
-    my $st;
-    local $ENV{LANG} = "C";
-    open $st, "svn st -u|" or die;
-    my $dirty = 0;
-    while (<$st>) {
-      next if /^\?/;
-      next if /^Head revision:/;
-      next if /^Status against revision:/;
-      print;
-      $dirty++;
+    warn "Your MakeMaker is a bit dated[$ExtUtils::MakeMaker::VERSION].\nYou should get a new one\n"
+        if $ExtUtils::MakeMaker::VERSION < 6.4502;
+    # not for XS modules: eval {  require $::version_from; }; die $@ if $@;
+    my $makefile = "Makefile";
+    unless (-f $makefile) {
+        $makefile = "Makefile.old";
     }
-    close $st;
-    die "Not everything checked in or out?" if $dirty;
-
-    # $re parses the upper boundary of the output of svnversion
-    my $re;
-    eval q{ $re = qr/(?:\d+:)?(\d+)[SM]*$/; };
-    die $@ if $@; # old perl
-    my($sv_dot)  = `svnversion .`             =~ $re;
-    my($sv_from) = `svn st -u -v $version_from`  =~ /^.{8}\s*(?:\d+)\s*(\d+)/;
-    die "Could not determine sv_from or sv_dot"
-        unless $sv_from > 0 && $sv_dot > 0;
-    if ($version_set_manually) {
-      # we must control that the VERSION in CPAN.pm is the same as in the Makefile
-      unshift @INC, "blib/arch", "blib/lib";
-      require $version_from;
-      open my $fh, "make the-release-name|" or die;
-      my $have_version;
-      while (<$fh>) {
-        next unless /^version\s+([\d\._]+)/;
-        $have_version = eval $1;
-      }
-      die "could not determine current version from Makefile" unless $have_version;
-      eval q{
-      no warnings "numeric";
-      if ($Devel::SawAmpersand::VERSION != $have_version) {
-        warn "Not equal: Devel::SawAmpersand::VERSION[$Devel::SawAmpersand::VERSION] Makefile version[$have_version]";
-        $version_diff = 1;
-      }
-};
-      die $@ if $@;
-    } else {
-      if ($sv_dot > $sv_from) {
-        warn "setting some property to make a checkin of this file possible";
-        0==system(svn => "propset",
-                  "cpan:release",
-                  "after_$sv_dot",
-                  $version_from) or die;
-        warn "checking in to get the version up to the bleading edge";
-        0==system(svn => "ci",
-                  "-m",
-                  "Property set for release after_$sv_dot",
-                  $version_from) or die;
-        # will have to die after Makefile is rewritten:
-        $version_diff = 1;
-      }
+    unless (-f $makefile) {
+        die "no Makefile and no Makefile.old found";
     }
-    exit unless $version_diff;
-  }
+    my $dirty = `git status --porcelain --untracked-files=no`;
+    die "Not everything checked in or out?\n====\n$dirty====\n" if $dirty;
+    # open my $fh, "make -f $makefile the-release-name|" or die "Could not fork: $!";
+    # local $/;
+    # my ($have_version) = <$fh> =~ /^version\s+([\d\._]+)/m;
+    # close $fh or die "Could not close: $!";
+    # my ($namespace) = $::version_from;
+    # $namespace =~ s|^lib/(.+)\.pm$|$1|;
+    # $namespace =~ s|/|::|g;
+    # eval qq{ if (\$$namespace\::VERSION != \$have_version) {
+    #     warn "Not equal: Devel::SawAmpersand::VERSION[\$$namespace\::VERSION] Makefile version[\$have_version]";
+    #     \$version_diff = 1;
+    # }};
+    # eval qq{ if (\$$namespace\::VERSION != \$mmgenereatedversionfrom) {
+    #     warn "Not equal: Devel::SawAmpersand::VERSION[\$$namespace\::VERSION] MM generated version[\$mmgenereatedversionfrom]";
+    #     \$version_diff = 1;
+    # }};
 }
 
-my @sign = (MM->can("signature_target") ? (SIGN => 1) : ());
+my %indirect_dependencies =
+    (
+     'CPAN::Meta::Converter' => '2.110440',
+    );
+my %interesting_modules;
+for my $m (qw(
+    Parse::CPAN::Meta
+    )){
+    if (eval "require $m; 1") {
+        $interesting_modules{$m} = $m->VERSION;
+    }
+}
 
-WriteMakefile(
-              'NAME'	=> 'Devel::SawAmpersand',
-              'VERSION_FROM' => 'lib/Devel/SawAmpersand.pm', # finds $VERSION
-              ($ExtUtils::MakeMaker::VERSION >= 6.3002 ?
-               (LICENSE      => "perl") : (),
-              ),
-              'LIBS'	=> [''],   # e.g., '-lm' 
-              'DEFINE'	=> '',     # e.g., '-DHAVE_SOMETHING' 
-              'INC'	=> '',     # e.g., '-I/usr/include/other' 
-              'dist'      => {
-                              COMPRESS => 'gzip -9',
-                              DIST_DEFAULT => join(" ",
-                                                   "META.yml",
-                                                   "setversion",
-                                                   "README",
-                                                   "all",
-                                                   "tardist",
-                                                  ),
-                             },
-              @sign,
-             );
+my $prereq_pm =
+    {
+     'Test::More'                  => 0,
+    };
+
+# intentionally avoiding any size comparisons, trying to catch
+# interesting cases that happen during WriteMakefile, like
+# http://www.cpantesters.org/cpan/report/e1942da8-5fcc-11e0-994f-224f8e2a057c
+while (my($k,$v) = each %interesting_modules) {
+    $prereq_pm->{$k} ||= $v;
+}
+while (my($k,$v) = each %indirect_dependencies) {
+    $prereq_pm->{$k} ||= $v;
+}
+
+eval { WriteMakefile
+    (
+     'NAME' => 'Devel::SawAmpersand',
+     'VERSION_FROM' => $::version_from,
+     'PREREQ_PM' => $prereq_pm,
+     'INSTALLDIRS' => 'site',
+     LICENSE => "perl",
+     ABSTRACT => "parse reports to www.cpantesters.org from various sources",
+     'PL_FILES' => {},
+     'LIBS'   => [''],   # e.g., '-lm' 
+     'DEFINE' => '',     # e.g., '-DHAVE_SOMETHING' 
+     'INC'    => '',     # e.g., '-I/usr/include/other' 
+     dist => {
+              DIST_DEFAULT => join(" ", # note: order matters!
+                                   "verify-changes-date",
+                                   "Makefile",
+                                   "META.yml",
+                                   "setversion",
+                                   "all",
+                                   "tardist",
+                                  ),
+              COMPRESS => 'gzip -9f',
+              SUFFIX => ".gz",
+             },
+     ($ExtUtils::MakeMaker::VERSION >= 6.4502 ?
+      (META_ADD => {
+                    provides => { "Devel::SawAmpersand" => { version => $mmgenereatedversionfrom, file => $::version_from }},
+                   }) : ()),
+     @sign,
+    );
+   };
+if (my $err = $@) {
+    while (my($k,$v) = each %interesting_modules) {
+        warn "Found $k version $v\n";
+    }
+    die $err;
+}
 
 if ($version_diff){
   die "
@@ -110,18 +112,20 @@ if ($version_diff){
 }
 
 package MY;
-
+sub distsignature {
+    my($self) = shift;
+    my $ret = $self->SUPER::distsignature_target(@_);
+    $ret =~ s|cpansign|\$(PERL) \`dirname \$(PERL)\`/cpansign|g;
+    return $ret;
+}
 sub postamble {
   my @m;
   push @m, q{
-the-release-name :
-	$(NOECHO) $(ECHO) 'version ' $(VERSION)
-	$(NOECHO) $(ECHO) 'release-name ' $(DISTVNAME).tar$(SUFFIX)
+# the subdirs on MY OWN BOX are allowed here (only used for make dist!)
+OKDIRS=DIST|bin|blib|cover_db\
+       |lib|t
 
-release ::
-	/usr/bin/perl -I$$HOME/sources/CPAN/SVN/release-lib -S release $(DISTVNAME).tar$(SUFFIX)
-	rm -rf $(DISTVNAME)
-	svn cp -m 'This is $(VERSION)' https://franz.ak.mind.de/public-svn/Devel-SawAmpersand/trunk https://franz.ak.mind.de/public-svn/Devel-SawAmpersand/tags/$(VERSION)
+Makefile: }.$::version_from.q{
 
 META.yml: metafile
 	$(CP) $(DISTVNAME)/META.yml  ./META.yml
@@ -129,6 +133,25 @@ META.yml: metafile
 setversion:
 	$(PERL) Makefile.PL --setversion
 
+verify-changes-date:
+	@$(PERL) -ne 'BEGIN{my@t=(localtime)[5,4,3];$$t[0]+=1900;$$t[1]++;$$t=sprintf"%04d-%02d-%02d",@t}' \
+		-e '$$ok++,exit if /^$$t\s/; END{die "Alert: did not find <$$t> in Changes file" unless $$ok}' Changes
+
+verify-no-subdir:
+	@$(PERL) -e 'my$$s=join",",grep{!/^($(OKDIRS))\z/x&&-d($$_)}glob"*";' \
+		-e 'die"unexpected dir:$$s"if$$s'
+
+the-release-name :
+	$(NOECHO) $(ECHO) 'version ' $(VERSION)
+	$(NOECHO) $(ECHO) 'release-name ' $(DISTVNAME).tar$(SUFFIX)
+
+release :: disttest
+	git tag -m 'This is $(VERSION)' $(VERSION)
+	ls -l $(DISTVNAME).tar$(SUFFIX)
+	rm -rf $(DISTVNAME)
+
+sign:
+	$(PERL) `dirname $(PERL)`/cpansign -s
 };
   join "", @m;
 }

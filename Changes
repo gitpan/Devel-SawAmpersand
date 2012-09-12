@@ -1,3 +1,9 @@
+2012-09-12  Andreas J Koenig  <k@k83.linux.bogus>
+
+	* releasing 0.33
+
+	* address #79589: adjust to perl 5.17.4: result of sawampersand now is a U8
+
 2010-06-18  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
 
 	* releasing 0.32

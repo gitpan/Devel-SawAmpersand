@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.55.
+signed via the Module::Signature module, version 0.68.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,22 +14,23 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 e8fa83274f7b6541b1810489e6b78ad0262b4123 ChangeLog
-SHA1 688f9e1db21c3bb09d99e98400e64cf55c4a3fd6 MANIFEST
-SHA1 37d71e34dd0378583b1ef4e9275c51e943c8af52 META.yml
-SHA1 19417b69e5d924ecaf8c20d53c4b924aedacd5ed Makefile.PL
-SHA1 94ff6add97b972532c0160dfc9a1e4c6c09e9d57 SawAmpersand.xs
+SHA1 f589fdfaee9ac1a2f45a400cf259e8200d0286f7 Changes
+SHA1 d6297c4ea091284ef9eee8465cc37b6a4685d8ae MANIFEST
+SHA1 24212214a2f6ecb61daefe7531dd2dbe5c6e632e META.json
+SHA1 a560e6b7abb19a2195d8493aa07c9229b43443bd META.yml
+SHA1 0f6dd84fef20c96b6dacee17500c594fa1028478 Makefile.PL
+SHA1 d144965860273db0e34f9fc4bcc7762ceefa0ac4 SawAmpersand.xs
 SHA1 dd434fbce5e0cc62d91fb58b29d2432e93148df5 lib/B/FindAmpersand.pm
 SHA1 f3383fc4857b344778edea58a8485a562168eb5e lib/Devel/FindAmpersand.pm
-SHA1 d82498eb5614b166ac7e3b31148dcf8897b1c1ff lib/Devel/SawAmpersand.pm
+SHA1 fd4f42c059f21401a673675dc94a66b71c0430f6 lib/Devel/SawAmpersand.pm
 SHA1 6a79f15a10337bd3450604abf39d4462df2a550b t/50pod.t
 SHA1 cb5c68400c34bc4d574626f4401d525438c43f73 t/52podcover.t
 SHA1 2aca1dd314b8eb2d77671fb9f800274360bb7b36 t/find.t
-SHA1 4ca25f75cd118f1ac93926594c3f3900c82ef500 t/saw.t
+SHA1 9abc54a92878c38dff6c8fca89d4c202fcf98456 t/saw.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.9 (GNU/Linux)
+Version: GnuPG v1.4.12 (GNU/Linux)
 
-iEYEARECAAYFAkwbCKYACgkQ7IA58KMXwV1weACgxpoeD0OMjQnR56gd1cXqc2yU
-WNwAoPJBCvI4AFfUvlM7AP6SvliZqZ6X
-=LL/2
+iEYEARECAAYFAlBRBPoACgkQ7IA58KMXwV2UbwCeMc5j849YLxm16IFtkpmr2rMU
+sI8AoP6lxPwXxJXnRClW82LjZo3g18m5
+=IBsC
 -----END PGP SIGNATURE-----
